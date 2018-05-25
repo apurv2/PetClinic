@@ -15,16 +15,11 @@
  */
 package org.springframework.samples.petclinic.owner;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 /**
  * @author Juergen Hoeller
@@ -35,22 +30,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class OwnerController {
 
-	@Autowired
-	OwnerRepository ownerRepository;
+    @Autowired
+    OwnerRepository ownerRepository;
 
-	@CrossOrigin
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST, value = "/owners/new")
-	public String createNewOwner(@RequestBody Owner owner) {
+    @CrossOrigin
+    @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST, value = "/owners/new")
+    public Owner createNewOwner(@RequestBody Owner owner) {
+        return ownerRepository.save(owner);
+    }
 
-		ownerRepository.save(owner);
-		return "success";
-	}
-	@CrossOrigin
-	@RequestMapping(method = RequestMethod.GET, value = "/owners/{lastName}")
-	public Collection<Owner> getAllOwners(@PathVariable String lastName) {
-
-		return ownerRepository.findByLastName(lastName);
-
-	}
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.GET, value = "/owners/{lastName}")
+    public Collection<Owner> getAllOwners(@PathVariable String lastName) {
+        return ownerRepository.findByLastName(lastName);
+    }
 
 }
